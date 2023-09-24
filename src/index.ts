@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import sequelize from './models/connection';
 
 const app = express()
 import books from './routes/bookRoutes';
@@ -14,37 +13,7 @@ app.use((err: any, req: Request, res: Response, next: any) => {
     res.status(500).send('Something went wrong!');
 });
 
-sequelize
-    .sync({ force: false }) // Set force to false to prevent dropping tables
-    .then(() => {
-        sequelize.authenticate()
-            .then(() => {
-                console.log('Database connection has been established successfully.');
-
-                app.listen(5000, () => {
-                    console.log('Server is listening on port 5000...');
-                });
-            })
-            .catch((error: any) => {
-                console.error('Unable to authenticate with the database:', error);
-            });
-    })
-    .catch((error: any) => {
-        console.error('Unable to synchronize the database:', error);
-    });
-
-
-// (async () => {
-//     try {
-//         await sequelize.authenticate();
-//         console.log('Database connection has been established successfully.');
-
-//         await sequelize.sync();
-
-//         app.listen(5000, () => {
-//             console.log('Server is listening on port 5000...');
-//         });
-//     } catch (error) {
-//         console.error('Unable to connect to the database:', error);
-//     }
-// })();
+const PORT = process.env.PORT || 5000
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}...`);
+})

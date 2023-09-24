@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
-import BooksModel from '../models/booksModel';
+import Books from '../models/bookModel';
+
 // Get all books from the database
 const getBooks = async (req: Request, res: Response) => {
     try {
-        const books = await BooksModel.findAll();
+        const books = await Books.findAll();
         res.status(200).json({ success: true, data: books });
     } catch (error) {
         console.error('Error getting books:', error);
@@ -15,7 +16,7 @@ const getBooks = async (req: Request, res: Response) => {
 const getBook = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
     try {
-        const book = await BooksModel.findByPk(id);
+        const book = await Books.findByPk(id);
         if (!book) {
             return res.status(404).json({ success: false, msg: `No book with id: ${id} is found` });
         }
@@ -30,7 +31,7 @@ const getBook = async (req: Request, res: Response) => {
 const createBook = async (req: Request, res: Response) => {
     const { name } = req.body;
     try {
-        const book = await BooksModel.create({ name });
+        const book = await Books.create({ name });
         res.status(201).json({ success: true, data: book });
     } catch (error) {
         console.error('Error creating book:', error);
@@ -43,11 +44,11 @@ const updateBook = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const { name } = req.body;
     try {
-        const [updatedRowCount] = await BooksModel.update({ name }, { where: { id } });
+        const [updatedRowCount] = await Books.update({ name }, { where: { id } });
         if (updatedRowCount === 0) {
             return res.status(404).json({ success: false, msg: `No book with id: ${id} is found` });
         }
-        const updatedBook = await BooksModel.findByPk(id);
+        const updatedBook = await Books.findByPk(id);
         res.status(200).json({ success: true, data: updatedBook });
     } catch (error) {
         console.error('Error updating book by ID:', error);
@@ -59,7 +60,7 @@ const updateBook = async (req: Request, res: Response) => {
 const deleteBook = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
     try {
-        const deletedRowCount = await BooksModel.destroy({ where: { id } });
+        const deletedRowCount = await Books.destroy({ where: { id } });
         if (deletedRowCount === 0) {
             return res.status(404).json({ success: false, msg: `No book with id: ${id} is found` });
         }

@@ -1,7 +1,7 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from './connection';
 
-const BooksModel = sequelize.define('booksModel', {
+const BookModel = sequelize.define('bookModel', {
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -14,4 +14,4 @@ const BooksModel = sequelize.define('booksModel', {
     timestamps: false,
 });
 
-export default BooksModel;
+export default BookModel;
