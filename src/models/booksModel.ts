@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
-const sequelize = require('../database/connection')
+import sequelize from './connection';
 
 const BooksModel = sequelize.define('booksModel', {
     id: {
@@ -14,4 +14,4 @@ const BooksModel = sequelize.define('booksModel', {
     timestamps: false,
 });
 
-module.exports = BooksModel;
+export default BooksModel;

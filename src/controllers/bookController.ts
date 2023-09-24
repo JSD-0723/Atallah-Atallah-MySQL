@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-const BooksModel = require("../models/booksModel")
+import BooksModel from '../models/booksModel';
 // Get all books from the database
 const getBooks = async (req: Request, res: Response) => {
     try {

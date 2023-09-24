@@ -1,9 +1,8 @@
-import { error } from 'console';
 import express, { Request, Response } from 'express';
-const sequelize = require('./database/connection');
+import sequelize from './models/connection';
 
 const app = express()
-const books = require('./routes/bookRoutes');
+import books from './routes/bookRoutes';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
