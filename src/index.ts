@@ -3,15 +3,20 @@ import express, { Request, Response } from 'express';
 const app = express()
 
 // Middlewares
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
 
 // Routes
 import books from './routes/bookRoutes';
 import customers from './routes/customerRoutes';
+import register from './api/register';
+import login from './api/login';
+
 
 // Middleware routes
+app.use(register)
+app.use(login)
 app.use('/api/books', books);
 app.use('/api/customers', customers);
 
