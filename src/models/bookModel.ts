@@ -1,17 +1,38 @@
 import { DataTypes } from 'sequelize';
 import sequelize from './connection';
+import Customer from './customerModel'
 
-const BookModel = sequelize.define('bookModel', {
+const Book = sequelize.define('book', {
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
     },
-    name: DataTypes.STRING(50),
+    name: {
+        type: DataTypes.STRING(50),
+        unique: true,
+    },
+    isbn: {
+        type: DataTypes.STRING(55),
+        unique: true,
+        allowNull: false,
+    },
+    customerId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: Customer, // Reference the Managers model
+            key: 'id', // Reference the ID column in Managers
+        },
+    }
 }, {
     freezeTableName: true,
     timestamps: false,
 });
 
-export default BookModel;
+Customer.hasMany(Book, {
+    foreignKey: 'customerId',
+})
+
+export default Book;

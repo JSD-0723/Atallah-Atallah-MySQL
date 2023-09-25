@@ -1,12 +1,19 @@
 import express, { Request, Response } from 'express';
 
 const app = express()
-import books from './routes/bookRoutes';
 
+// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+
+// Routes
+import books from './routes/bookRoutes';
+import customers from './routes/customerRoutes';
+
+// Middleware routes
 app.use('/api/books', books);
+app.use('/api/customers', customers);
 
 app.use((err: any, req: Request, res: Response, next: any) => {
     console.error(err.stack);

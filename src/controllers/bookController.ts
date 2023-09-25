@@ -29,9 +29,9 @@ const getBook = async (req: Request, res: Response) => {
 
 // Create a new book in the database
 const createBook = async (req: Request, res: Response) => {
-    const { name } = req.body;
+    const { name, isbn, customerId } = req.body;
     try {
-        const book = await Books.create({ name });
+        const book = await Books.create({ name, isbn, customerId });
         res.status(201).json({ success: true, data: book });
     } catch (error) {
         console.error('Error creating book:', error);
@@ -42,9 +42,9 @@ const createBook = async (req: Request, res: Response) => {
 // Update a book by ID in the database
 const updateBook = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const { name } = req.body;
+    const { name, isbn, customerId } = req.body;
     try {
-        const [updatedRowCount] = await Books.update({ name }, { where: { id } });
+        const [updatedRowCount] = await Books.update({ name, isbn, customerId }, { where: { id } });
         if (updatedRowCount === 0) {
             return res.status(404).json({ success: false, msg: `No book with id: ${id} is found` });
         }
