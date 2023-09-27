@@ -27,11 +27,13 @@ const getCustomer = async (req: Request, res: Response) => {
     }
 };
 
+// TO-DO add role field
+
 // Create a new customer in the database
 const createCustomer = async (req: Request, res: Response) => {
-    const { fullNamename, email, password } = req.body;
+    const { fullNamename, email, password, role } = req.body;
     try {
-        const customer = await Customers.create({ fullNamename, email, password });
+        const customer = await Customers.create({ fullNamename, email, password, role });
         res.status(201).json({ success: true, data: customer });
     } catch (error) {
         console.error('Error creating customer:', error);
@@ -42,9 +44,9 @@ const createCustomer = async (req: Request, res: Response) => {
 // Update a customer by ID in the database
 const updateCustomer = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const { fullNamename, email, password } = req.body;
+    const { fullNamename, email, password, role } = req.body;
     try {
-        const [updatedRowCount] = await Customers.update({ fullNamename, email, password }, { where: { id } });
+        const [updatedRowCount] = await Customers.update({ fullNamename, email, password, role }, { where: { id } });
         if (updatedRowCount === 0) {
             return res.status(404).json({ success: false, msg: `No customer with id: ${id} is found` });
         }

@@ -21,7 +21,11 @@ const userModel = sequelize.define('user', {
     password: {
         type: DataTypes.STRING(50),
         allowNull: false,
-    }
+    },
+    role: {
+        type: DataTypes.ENUM('admin', 'customer'),
+        // defaultValue: 'customer',
+    },
 }, {
     freezeTableName: true,
     timestamps: false,

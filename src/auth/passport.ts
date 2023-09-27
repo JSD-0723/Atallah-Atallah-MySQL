@@ -14,9 +14,9 @@ const jwtOptions: StrategyOptions = {
 
 passport.use(new StrategyJWT(jwtOptions, async (jwtPayload, done) => {
     try {
-        const user = await User.findOne({ where: { id: jwtPayload.id } });
+        const user: any = await User.findOne({ where: { id: jwtPayload.id } });
         if (user) {
-            return done(null, user);
+            return done(null, { ...jwtPayload, role: user.role });
         } else {
             return done(null, false);
         }

@@ -25,7 +25,12 @@ const Book = sequelize.define('book', {
             model: Customer, // Reference the Managers model
             key: 'id', // Reference the ID column in Managers
         },
-    }
+    },
+    // reservedByCustomerId: {
+    //     type: DataTypes.INTEGER,
+    //     allowNull: true,
+    //     defaultValue: null,
+    // },
 }, {
     freezeTableName: true,
     timestamps: false,

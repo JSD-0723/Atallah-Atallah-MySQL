@@ -1,18 +1,15 @@
+// customerRoutes.js
 import express from 'express';
+import { isCustomer, isAdmin } from '../middleware/authMiddleware';
+import passport from 'passport';
+import { getCustomers, createCustomer, getCustomer, updateCustomer, deleteCustomer } from '../controllers/customerController';
+
 const router = express.Router();
 
-const {
-    createCustomer,
-    getCustomers,
-    getCustomer,
-    updateCustomer,
-    deleteCustomer
-} = require('../controllers/customerController')
+router.get('/', passport.authenticate('jwt', { session: false }), isCustomer, getCustomers);
+router.post('/', isCustomer, createCustomer);
+router.get('/:id', isCustomer, getCustomer);
+router.put('/:id', isCustomer, updateCustomer);
+router.delete('/:id', isCustomer, deleteCustomer);
 
-router.get('/', getCustomers)
-router.get('/:id', getCustomer)
-router.post('/', createCustomer)
-router.put('/:id', updateCustomer)
-router.delete('/:id', deleteCustomer)
-
-export default router
+export default router;

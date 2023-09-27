@@ -71,6 +71,33 @@ const deleteBook = async (req: Request, res: Response) => {
     }
 };
 
+// const reserveBook = async (req: Request, res: Response) => {
+//     const bookId = Number(req.params.id);
+//     const customerId = req.user.id;
+//     const { reservedByCustomerId } = req.body;
+
+//     try {
+//         const book = await Books.findByPk(bookId);
+
+//         if (!book) {
+//             return res.status(404).json({ success: false, msg: `Book with ID ${bookId} not found` });
+//         }
+
+//         if (reservedByCustomerId) {
+//             return res.status(400).json({ success: false, msg: 'Book is already reserved' });
+//         }
+
+//         // Update the book's reservation
+//         await book.update({ reservedByCustomerId: customerId });
+
+//         res.status(200).json({ success: true, msg: 'Book reserved successfully' });
+//     } catch (error) {
+//         console.error('Error reserving book:', error);
+//         res.status(500).json({ success: false, msg: 'Internal server error' });
+//     }
+// };
+
+
 export {
     getBooks,
     getBook,
