@@ -63,8 +63,8 @@ const getRentedBooksByUser = asyncWrqper(async (req: Request, res: Response, nex
         return next(createCustomError(`No user with id: ${userId} is found`, 404))
     }
 
-    // const books = await user.getBooks();
-    const books = await Book.findAll({ where: { userId, rented: true } });
+    const books = await user.getBooks();
+    // const books = await Book.findAll({ where: { userId, rented: true } });
     return res.json({ userId, books });
 });
 
