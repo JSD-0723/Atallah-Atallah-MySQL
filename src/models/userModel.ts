@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from './connection';
+import Book from './bookModel';
 
 class User extends Model {
     declare id: number;
@@ -11,6 +12,24 @@ class User extends Model {
 
     public getFullName(): string {
         return `${this.getDataValue('firstName')} ${this.getDataValue('lastName')}`;
+    }
+
+    public async getBooks(): Promise<Book[]> {
+        try {
+            const userId = this.getDataValue('id');
+
+            const books = await Book.findAll({
+                where: {
+                    userId: userId,
+                    rented: true,
+                },
+            });
+
+            return books;
+        } catch (error) {
+            console.error('Error fetching books:', error);
+            throw error;
+        }
     }
 }
 
@@ -48,6 +67,21 @@ User.init(
                 return `${this.getDataValue('firstName')} ${this.getDataValue('lastName')}`;
             },
         },
+        // books: {
+        //     type: DataTypes.VIRTUAL,
+        //     async get() {
+        //         const userId = this.getDataValue('id');
+
+        //         const books = await Book.findAll({
+        //             where: {
+        //                 userId: userId,
+        //                 rented: true,
+        //             },
+        //         });
+
+        //         return books;
+        //     },
+        // },
     },
     {
         sequelize,
@@ -56,6 +90,14 @@ User.init(
         timestamps: false,
     }
 );
+
+User.hasMany(Book, {
+    foreignKey: 'userId',
+});
+
+Book.belongsTo(User, {
+    foreignKey: 'userId',
+});
 
 type UserAttributes = {
     id: number;
@@ -66,8 +108,24 @@ type UserAttributes = {
     role: 'admin' | 'customer';
 };
 
+
 export { User, UserAttributes };
 
+
+// (async (userId: any) => {
+//     try {
+//         const user = await User.findByPk(userId);
+//         if (!user) {
+//             console.log('User not found');
+//             return;
+//         }
+
+//         const books = await user.getBooks();
+//         console.log('User books:', books);
+//     } catch (error) {
+//         console.error('Error:', error);
+//     }
+// })(1);
 
 
 

@@ -18,7 +18,7 @@ const getBook = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
     try {
         const book = await Books.findByPk(id);
-        console.log('Book: ', book);
+        console.log('Book:', book?.name);
         if (!book) {
             return res.status(404).json({ success: false, msg: `No book with id: ${id} is found` });
         }
@@ -34,6 +34,7 @@ const createBook = async (req: Request, res: Response) => {
     const { name, isbn, userId } = req.body;
     try {
         const book = await Books.create({ name, isbn, userId });
+        console.log('Created Book:', book?.name);
         res.status(201).json({ success: true, data: book });
     } catch (error) {
         console.error('Error creating book:', error);
@@ -47,10 +48,13 @@ const updateBook = async (req: Request, res: Response) => {
     const { name, isbn, userId } = req.body;
     try {
         const [updatedRowCount] = await Books.update({ name, isbn, userId }, { where: { id } });
+        console.log('Updated Row Count:', updatedRowCount);
         if (updatedRowCount === 0) {
             return res.status(404).json({ success: false, msg: `No book with id: ${id} is found` });
         }
         const updatedBook = await Books.findByPk(id);
+        console.log('Updated Book:', updatedBook?.name);
+
         res.status(200).json({ success: true, data: updatedBook });
     } catch (error) {
         console.error('Error updating book by ID:', error);
@@ -66,6 +70,7 @@ const deleteBook = async (req: Request, res: Response) => {
         if (deletedRowCount === 0) {
             return res.status(404).json({ success: false, msg: `No book with id: ${id} is found` });
         }
+        console.log('Deleted Book:', deletedRowCount);
         res.status(200).json({ success: true, msg: 'Book deleted successfully' });
     } catch (error) {
         console.error('Error deleting book by ID:', error);
@@ -79,6 +84,7 @@ const rentBook = async (req: Request, res: Response) => {
         const userId = Number(req.params.userId);
 
         const book = await Books.findByPk(bookId);
+        console.log('Book:', book?.name);
 
         if (!book) {
             return res.status(404).json({ message: 'Book not found' });
@@ -100,33 +106,6 @@ const rentBook = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
-
-
-// const reserveBook = async (req: Request, res: Response) => {
-//     const bookId = Number(req.params.id);
-//     const userId = req.user.id;
-//     const { reservedByuserId } = req.body;
-
-//     try {
-//         const book = await Books.findByPk(bookId);
-
-//         if (!book) {
-//             return res.status(404).json({ success: false, msg: `Book with ID ${bookId} not found` });
-//         }
-
-//         if (reservedByuserId) {
-//             return res.status(400).json({ success: false, msg: 'Book is already reserved' });
-//         }
-
-//         // Update the book's reservation
-//         await book.update({ reservedByuserId: userId });
-
-//         res.status(200).json({ success: true, msg: 'Book reserved successfully' });
-//     } catch (error) {
-//         console.error('Error reserving book:', error);
-//         res.status(500).json({ success: false, msg: 'Internal server error' });
-//     }
-// };
 
 
 export {

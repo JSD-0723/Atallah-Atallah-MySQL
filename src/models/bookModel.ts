@@ -48,14 +48,36 @@ Book.init(
     }
 );
 
-User.hasMany(Book, {
-    foreignKey: 'userId',
-    as: 'books',
-});
+// User.hasMany(Book, {
+//     foreignKey: 'userId',
+//     as: 'book',
+// });
 
-Book.belongsTo(User, {
-    foreignKey: 'userId',
-    as: 'user',
-});
+// Book.belongsTo(User, {
+//     foreignKey: 'userId',
+//     as: 'user',
+// });
+
+// Hook
+// User.beforeDestroy(async (user, options) => {
+//     console.log('Before destroy hook triggered for user ID:', user.id);
+//     try {
+//         const books = await Book.findAll({
+//             where: {
+//                 userId: user.id,
+//             },
+//         });
+//         console.log('Found books:', books);
+
+//         await Promise.all(books.map(book => {
+//             console.log('Updating book:', book.id);
+//             return book.update({ rented: false, userId: null });
+//         }));
+//     } catch (error) {
+//         console.error('Error updating rented status:', error);
+//         throw error;
+//     }
+// });
+
 
 export default Book;
