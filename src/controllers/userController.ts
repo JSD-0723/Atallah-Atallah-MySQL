@@ -42,9 +42,9 @@ const createUser = async (req: Request, res: Response) => {
 // Update a user by ID in the database
 const updateUser = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, role } = req.body;
     try {
-        const [updatedRowCount] = await User.update({ firstName, lastName, email, password }, { where: { id } });
+        const [updatedRowCount] = await User.update({ firstName, lastName, email, password, role }, { where: { id } });
         if (updatedRowCount === 0) {
             return res.status(404).json({ success: false, msg: `No user with id: ${id} is found` });
         }

@@ -5,6 +5,7 @@ import Books from '../models/bookModel';
 const getBooks = async (req: Request, res: Response) => {
     try {
         const books = await Books.findAll();
+        console.log('Books: ', books);
         res.status(200).json({ success: true, data: books });
     } catch (error) {
         console.error('Error getting books:', error);
@@ -17,6 +18,7 @@ const getBook = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
     try {
         const book = await Books.findByPk(id);
+        console.log('Book: ', book);
         if (!book) {
             return res.status(404).json({ success: false, msg: `No book with id: ${id} is found` });
         }
@@ -29,9 +31,9 @@ const getBook = async (req: Request, res: Response) => {
 
 // Create a new book in the database
 const createBook = async (req: Request, res: Response) => {
-    const { name, isbn, customerId } = req.body;
+    const { name, isbn, userId } = req.body;
     try {
-        const book = await Books.create({ name, isbn, customerId });
+        const book = await Books.create({ name, isbn, userId });
         res.status(201).json({ success: true, data: book });
     } catch (error) {
         console.error('Error creating book:', error);
@@ -42,9 +44,9 @@ const createBook = async (req: Request, res: Response) => {
 // Update a book by ID in the database
 const updateBook = async (req: Request, res: Response) => {
     const id = Number(req.params.id);
-    const { name, isbn, customerId } = req.body;
+    const { name, isbn, userId } = req.body;
     try {
-        const [updatedRowCount] = await Books.update({ name, isbn, customerId }, { where: { id } });
+        const [updatedRowCount] = await Books.update({ name, isbn, userId }, { where: { id } });
         if (updatedRowCount === 0) {
             return res.status(404).json({ success: false, msg: `No book with id: ${id} is found` });
         }
@@ -71,10 +73,39 @@ const deleteBook = async (req: Request, res: Response) => {
     }
 };
 
+const rentBook = async (req: Request, res: Response) => {
+    try {
+        const bookId = Number(req.params.bookId);
+        const userId = Number(req.params.userId);
+
+        const book = await Books.findByPk(bookId);
+
+        if (!book) {
+            return res.status(404).json({ message: 'Book not found' });
+        }
+
+        if (book.rented) {
+            return res.status(400).json({ message: 'Book is already rented' });
+        }
+
+        // Update book details to mark it as rented
+        await book.update({
+            userId, // ID of the customer who is renting the book
+            rented: true,
+        });
+
+        res.json({ message: 'Book rented successfully', book });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+
 // const reserveBook = async (req: Request, res: Response) => {
 //     const bookId = Number(req.params.id);
-//     const customerId = req.user.id;
-//     const { reservedByCustomerId } = req.body;
+//     const userId = req.user.id;
+//     const { reservedByuserId } = req.body;
 
 //     try {
 //         const book = await Books.findByPk(bookId);
@@ -83,12 +114,12 @@ const deleteBook = async (req: Request, res: Response) => {
 //             return res.status(404).json({ success: false, msg: `Book with ID ${bookId} not found` });
 //         }
 
-//         if (reservedByCustomerId) {
+//         if (reservedByuserId) {
 //             return res.status(400).json({ success: false, msg: 'Book is already reserved' });
 //         }
 
 //         // Update the book's reservation
-//         await book.update({ reservedByCustomerId: customerId });
+//         await book.update({ reservedByuserId: userId });
 
 //         res.status(200).json({ success: true, msg: 'Book reserved successfully' });
 //     } catch (error) {
@@ -103,5 +134,6 @@ export {
     getBook,
     createBook,
     updateBook,
-    deleteBook
+    deleteBook,
+    rentBook
 };

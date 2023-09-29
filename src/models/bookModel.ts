@@ -4,9 +4,10 @@ import { User } from './userModel';
 
 class Book extends Model {
     declare id: number;
-    public name!: string;
-    public isbn!: string;
-    public userId!: number | null;
+    declare name: string;
+    declare isbn: string;
+    declare userId: number | null;
+    declare rented: boolean;
 }
 
 Book.init(
@@ -25,6 +26,10 @@ Book.init(
             type: DataTypes.STRING(55),
             unique: true,
             allowNull: false,
+        },
+        rented: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
         },
         userId: {
             type: DataTypes.INTEGER,
