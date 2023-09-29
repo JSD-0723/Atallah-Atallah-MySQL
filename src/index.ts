@@ -21,15 +21,15 @@ app.use(cors());
 
 // Routes
 import books from './routes/bookRoutes';
-import customers from './routes/customerRoutes';
+import users from './routes/userRoutes';
 import register from './api/register';
 import login from './api/login';
 
 // Middleware routes
 app.use(register);
 app.use(login);
-app.use('/api/books', passport.authenticate('jwt', { session: false }), books);
-app.use('/api/customers', customers);
+app.use('/api/books', /*passport.authenticate('jwt', { session: false }),*/ books);
+app.use('/api/users', users);
 
 app.use((err: any, req: Request, res: Response, next: any) => {
     console.error(err.stack);

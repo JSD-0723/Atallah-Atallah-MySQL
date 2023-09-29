@@ -1,7 +1,7 @@
 import passport from 'passport';
 import passportJWT, { StrategyOptions } from 'passport-jwt';
 import { ExtractJwt } from 'passport-jwt';
-import User from '../models/customerModel';
+import User from '../models/userModel';
 const config = require('../../config/config.json');
 
 const ExtractJWT = ExtractJwt;

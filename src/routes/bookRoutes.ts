@@ -6,10 +6,10 @@ import { getBooks, getBook, createBook, updateBook, deleteBook } from '../contro
 
 const router = express.Router();
 
-router.get('/', isCustomer, getBooks);
-router.get('/', isCustomer, getBook);
-router.post('/', isAdmin, createBook);
-router.put('/:id', isAdmin, updateBook);
-router.delete('/:id', isAdmin, deleteBook);
+router.get('/', getBooks);
+router.get('/', getBook);
+router.post('/', createBook);
+router.put('/:id', updateBook);
+router.delete('/:id', deleteBook);
 
 export default router;

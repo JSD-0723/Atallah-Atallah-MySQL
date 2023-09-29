@@ -1,13 +1,12 @@
 import express, { Request, Response } from 'express';
-import bcrypt from 'bcrypt';
 const router = express.Router();
 
-import User from '../models/customerModel';
+import { User } from '../models/userModel';
 
 router.post('/api/register', async (req: Request, res: Response) => {
-    const { fullName, email, password, role } = req.body;
+    const { firstName, lastName, email, password, role } = req.body;
 
-    if (!fullName || !email || !password || !role) {
+    if (!firstName || !lastName || !email || !password || !role) {
         return res.status(400).json({ error: 'Please provide all required fields' });
     }
 
@@ -19,9 +18,7 @@ router.post('/api/register', async (req: Request, res: Response) => {
         return res.json({ message: 'User with email already exists!' });
     }
 
-    // const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({ fullName, email, password /* : hashedPassword */, role });
+    const newUser = await User.create({ firstName, lastName, email, password, role });
     const savedUser = await newUser.save().catch((err: Error) => {
         console.log('Error: ', err)
         res.json({ error: "Can't register user at the moment" })
