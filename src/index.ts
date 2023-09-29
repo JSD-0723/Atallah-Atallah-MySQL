@@ -24,17 +24,21 @@ import books from './routes/bookRoutes';
 import users from './routes/userRoutes';
 import register from './api/register';
 import login from './api/login';
+import notFound from './middleware/not-Found';
+import errorHandler from './middleware/error-Handler';
 
 // Middleware routes
 app.use(register);
 app.use(login);
 app.use('/api/books', /*passport.authenticate('jwt', { session: false }),*/ books);
 app.use('/api/users', users);
+app.use(notFound)
+app.use(errorHandler)
 
-app.use((err: any, req: Request, res: Response, next: any) => {
-    console.error(err.stack);
-    res.status(500).send('Something went wrong!');
-});
+// app.use((err: any, req: Request, res: Response, next: any) => {
+//     console.error(err.stack);
+//     res.status(500).send('Something went wrong!');
+// });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
